@@ -32,4 +32,4 @@ done
 pip install papermill jupyter
 
 # run the dem example notebook
-papermill /tool_init/init/upload_dem.ipynb /tool_init/init/$(date +%F)_upload_dem.ipynb -p DATA_DIR "${DATA_FILE_PATH}/DEM/*.tif" -p CONNECTION $METACATALOG_URI
+papermill /tool_init/upload_dem.ipynb /tool_init/$(date +%F)_upload_dem.ipynb -p DATA_DIR "${DATA_FILE_PATH}/DEM/*.tif" -p CONNECTION $METACATALOG_URI
