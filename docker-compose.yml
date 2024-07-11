@@ -10,7 +10,7 @@ services:
     ports:
       - 5433:5432
     volumes:
-      - ../../data/pg_data:/var/lib/postgresql/data
+      - ./data/pg_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "sh -c 'pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}'"]
       interval: 50s
@@ -18,9 +18,7 @@ services:
       retries: 5
 
   installer:
-    build:
-      context: ../../
-      dockerfile: Dockerfile
+    image: ghcr.io/vforwater/tbr_vforwater_loader:v0.11.0
     links:
       - db
     depends_on: 
@@ -35,35 +33,13 @@ services:
       LON_MAX: 10
     command: ["python", "/src/pg_init/init.py"]
     volumes:
-      - ../../data/raster:/data/raster
-      - ../../examples/dem:/tool_init
+      - ./data/raster:/data/raster
+      - ./init/dem:/tool_init
     
-  loader:
-    build:
-      context: ../../
-      dockerfile: Dockerfile
-    links:
-      - db
-    depends_on:
-      installer:
-        condition: "service_completed_successfully"
-    environment:
-      METACATALOG_URI: postgresql://postgres:postgres@db:5432/metacatalog
-    command: ["echo", "run the tool like 'docker compose run --rm loader python run.py'"]
-    volumes:
-      - ../../in:/in
-      - ../../out:/out
-      - ./data:/data/raster
 
 # RIGHT NOW I CAN'T THINK OF A BETTER WAY TO DO THIS.
-# IDEALLY, WE SHOULD HAVE tool_runner WORKING, WHICH BUILDS THE loader and handles the
-# MOUNTS itself. ALTERNATIVELY, WE WOULD NEED A WAY HOW WE CAN INVOKE THE default loader
-# BUT OVERWRITE THE MOUNTS. I DON'T KNOW HOW TO DO THAT.
-# THUS I create a new service for each of the examples
   de210080_loader:
-    build:
-      context: ../../
-      dockerfile: Dockerfile
+    image: ghcr.io/vforwater/tbr_vforwater_loader:v0.11.0
     links:
       - db
     depends_on:
@@ -75,5 +51,4 @@ services:
     volumes:
       - ./DE210080/in:/in
       - ./DE210080/out:/out
-      - ../../data/raster:/data/raster
-#      - ../../src:/src
+      - ./data/raster:/data/raster
