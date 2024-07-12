@@ -1,0 +1,44 @@
+services:
+  # Each 'study' needs an antive instance of the shared database
+  db:
+    image: postgis/postgis:15-3.4
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: metacatalog
+    expose:
+      - 5432
+    ports:
+      - 5433:5432
+    volumes:
+      - ../../data/pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}'"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+
+
+# Down here we run the tools needed for the Gesotatisitcal development Study
+#
+#
+  # Load the DEM for study area called 'OpenField'
+  openfield_loader:
+    image: ghcr.io/vforwater/tbr_vforwater_loader:v0.11.0
+    links:
+      - db
+    # depends_on:
+    #   installer:
+    #     condition: "service_completed_successfully"
+    depends_on: 
+      db:
+        condition: "service_healthy"
+    environment:
+      METACATALOG_URI: postgresql://postgres:postgres@db:5432/metacatalog
+    command: ["echo", "run the tool like 'docker compose run --rm openfield_loader python run.py'"]
+    volumes:
+      - ./OpenField/in:/in
+      - ./OpenField/out:/out
+      - ../../data/raster:/data/raster
+
+  
