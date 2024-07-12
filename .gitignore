@@ -1,0 +1,9 @@
+# ignore away the data folder
+data/pg_data/*
+data/raster/*
+
+# ignore every out folder
+out
+
+# ignore all notebooks that were run by papermill (they are client only)
+papermill_*.ipynb
