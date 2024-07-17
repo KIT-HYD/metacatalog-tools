@@ -15,7 +15,7 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "sh -c 'pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}'"]
       interval: 5s
-      timeout: 10s
+      timeout: 1s
       retries: 5
 
 
@@ -24,7 +24,7 @@ services:
 #
   # Load the DEM for study area called 'OpenField'
   openfield_loader:
-    image: ghcr.io/vforwater/tbr_vforwater_loader:v0.11.0
+    image: ghcr.io/vforwater/tbr_vforwater_loader:v0.12.0
     links:
       - db
     # depends_on:

@@ -20,7 +20,7 @@ services:
 
   # The Installers can be used to add data to the main directory shared by all studies.
   dem_installer:
-    image: ghcr.io/vforwater/tbr_vforwater_loader:v0.11.0
+    image: ghcr.io/vforwater/tbr_vforwater_loader:v0.12.0
     links:
       - db
     depends_on: 
