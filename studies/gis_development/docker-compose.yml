@@ -45,6 +45,8 @@ services:
   gis_tools:
     image: ghcr.io/vforwater/tbr_whitebox:latest
     command: ["echo", "run the tool like 'docker compose run --rm gis_tools python run.py'"]
+    environment:
+      RUN_TOOL: hillslope_generator
     volumes:
       - ./GIS_TOOL/in:/in
       - ./GIS_TOOL/out:/out
