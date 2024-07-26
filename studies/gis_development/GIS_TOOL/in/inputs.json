@@ -1,0 +1,10 @@
+{
+  "hillslope_generator": {
+    "parameters": {
+      "stream_threshold": 100
+    },
+    "data": {
+      "dem": "/in/dem.tif"
+    }
+  }
+}
